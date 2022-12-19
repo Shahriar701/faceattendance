@@ -32,7 +32,8 @@ interface MyAPI {
                 .build()
             
             return Retrofit.Builder()
-                .baseUrl("https://9462-58-145-187-252.in.ngrok.io/")
+//                .baseUrl("http://10.0.2.2:8080/")
+                .baseUrl("https://a9ea-202-134-14-140.in.ngrok.io/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build()

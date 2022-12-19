@@ -12,6 +12,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.activity.viewModels
@@ -33,10 +34,10 @@ import java.util.*
 
 class OnPremisesAuth : AppCompatActivity(), UploadRequestBody.UploadCallback{
     
-    val viewModel: FileViewModel by viewModels()
+//    val viewModel: FileViewModel by viewModels()
     private var selectedImageUri: Uri? = null
     lateinit var ivCamera: ImageView
-    lateinit var btnUpload: Button
+    lateinit var btnUpload: ImageButton
     private val CAMERA_REQUEST_CODE = 100
     lateinit var photoFile: File
     lateinit var layoutRoot: View
@@ -85,7 +86,7 @@ class OnPremisesAuth : AppCompatActivity(), UploadRequestBody.UploadCallback{
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        
+
         if (resultCode == RESULT_OK) {
             if (requestCode == CAMERA_REQUEST_CODE) {
                 selectedImageUri?.let { uri ->
@@ -150,19 +151,26 @@ class OnPremisesAuth : AppCompatActivity(), UploadRequestBody.UploadCallback{
                 Log.i("upload", t.message!!)
                 progressBar.progress = 0
             }
-            
+
             override fun onResponse(
                 call: Call<UploadResponse>,
                 response: Response<UploadResponse>
             ) {
-                response.body()?.let {
-                    Log.i("upload", it.message)
-                    layoutRoot.snackbar(it.message)
+                response.body()?.message.let {
+                    Log.i("upload", response.message())
+                    it.let { it1 -> layoutRoot.snackbar(response.message()) }
                     progressBar.progress = 100
+                    val intent = Intent(this@OnPremisesAuth, VarificationActivity::class.java)
+                    if(response.body()?.isKnown == true){
+                        intent.putExtra("msg", "Welcome ${response.body()!!.message}, You are authenticated")
+                        startActivity(intent)
+                    }else{
+                        intent.putExtra("msg", response.body()!!.message)
+                        startActivity(intent)
+                    }
                 }
             }
         })
-        
     }
     
     override fun onProgressUpdate(percentage: Int) {
