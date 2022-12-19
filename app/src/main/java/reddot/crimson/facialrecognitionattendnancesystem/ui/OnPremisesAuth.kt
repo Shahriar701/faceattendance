@@ -2,13 +2,13 @@ package reddot.crimson.facialrecognitionattendnancesystem.ui
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.text.Layout
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -17,7 +17,6 @@ import android.widget.ProgressBar
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -27,10 +26,7 @@ import reddot.crimson.facialrecognitionattendnancesystem.services.MyAPI
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -114,12 +110,12 @@ class OnPremisesAuth : AppCompatActivity(), UploadRequestBody.UploadCallback{
                 Log.i("selectedImageUri", selectedImageUri.toString())
                 ivCamera.setImageBitmap(bitMap)
     
-                uploadImage()
+                uploadImage(bitMap)
             }
         }
     }
     
-    private fun uploadImage() {
+    private fun uploadImage(bitmap: Bitmap?) {
         if (selectedImageUri == null) {
             layoutRoot.snackbar("Select an Image First")
             return
@@ -132,9 +128,15 @@ class OnPremisesAuth : AppCompatActivity(), UploadRequestBody.UploadCallback{
         val file = File(cacheDir, contentResolver.getFileName(selectedImageUri!!))
         val outputStream = FileOutputStream(file)
         inputStream.copyTo(outputStream)
+    
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 90, outputStream);
+        
+        val options = BitmapFactory.Options()
+        options.inSampleSize = 2 //4, 8, etc. the more value, the worst quality of image
         
         progressBar.progress = 0
         val body = UploadRequestBody(file, "image", this)
+        
         MyAPI().uploadImage(
             MultipartBody.Part.createFormData(
                 "image",
