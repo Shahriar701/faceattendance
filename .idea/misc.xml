@@ -13,6 +13,9 @@
         <entry key="..\:/PracticeProjects/FacialRecognitionAttendnanceSystem/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
         <entry key="..\:/PracticeProjects/FacialRecognitionAttendnanceSystem/app/src/main/res/layout/activity_on_premessis_auth.xml" value="0.16666666666666666" />
         <entry key="..\:/PracticeProjects/FacialRecognitionAttendnanceSystem/app/src/main/res/xml/provider_paths.xml" value="0.1796875" />
+        <entry key="app/src/main/res/drawable/ic_baseline_photo_camera_24.xml" value="0.268" />
+        <entry key="app/src/main/res/layout/activity_on_premessis_auth.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_varification.xml" value="0.22" />
       </map>
     </option>
   </component>
