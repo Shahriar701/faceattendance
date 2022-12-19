@@ -130,10 +130,7 @@ class OnPremisesAuth : AppCompatActivity(), UploadRequestBody.UploadCallback{
         val outputStream = FileOutputStream(file)
         inputStream.copyTo(outputStream)
     
-        bitmap?.compress(Bitmap.CompressFormat.JPEG, 90, outputStream);
-        
-        val options = BitmapFactory.Options()
-        options.inSampleSize = 2 //4, 8, etc. the more value, the worst quality of image
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
         
         progressBar.progress = 0
         val body = UploadRequestBody(file, "image", this)
