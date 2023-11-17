@@ -36,8 +36,8 @@ jobs:
       run: |
         git config user.email "rashed162@gmail.com"
         git config user.name "rashed-imam"
-        cd $GITHUB_WORKSPACE  # Change to the repository directory
         TAG_NAME=$(git log --pretty=format:'%h' -n 1)
+        cd $GITHUB_WORKSPACE  # Change to the repository directory
         git tag -a $TAG_NAME -m "Version $TAG_NAME"
         git push origin $TAG_NAME
         
