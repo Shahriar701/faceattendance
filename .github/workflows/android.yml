@@ -21,14 +21,16 @@ jobs:
 
     - name: Grant execute permission
       run: chmod +x gradlew
+      
+    - name: Get Version Code
+      id: version_code
+      run: echo "VERSION_CODE=$(./gradlew -q getVersionCode)" >> $GITHUB_ENV
 
-    - name: Build and Zip APK
-      run: |
-        ./gradlew assembleRelease
-        zip -r release.zip $GITHUB_WORKSPACE/app/build/outputs/apk/release/
-
+    - name: Build APK
+      run: ./gradlew assembleRelease
+      
     - name: Upload Release APK to GitHub
       uses: actions/upload-artifact@v2
       with:
-        name: release
-        path: release.zip
+        name: ${{ env.VERSION_CODE }}-release
+        path: $GITHUB_WORKSPACE/app/build/outputs/apk/release/
