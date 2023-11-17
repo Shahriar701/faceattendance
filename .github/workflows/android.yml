@@ -6,10 +6,10 @@ on:
       - master
 
 jobs:
-  build:
+  build-and-upload:
     runs-on: ubuntu-latest
 
-    steps: 
+    steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
@@ -22,27 +22,13 @@ jobs:
     - name: Grant execute permission
       run: chmod +x gradlew
 
-    - name: Build APK
+    - name: Build and Zip APK
       run: |
         ./gradlew assembleRelease
+        zip -r release.zip $GITHUB_WORKSPACE/app/build/outputs/apk/release/
 
-  upload:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-
-    - name: Set up Git
-      run: |
-        git -C $GITHUB_WORKSPACE config user.email "rashed162@gmail.com"
-        git -C $GITHUB_WORKSPACE config user.name "rashed-imam"
-        TAG_NAME=$(git -C $GITHUB_WORKSPACE log --pretty=format:'%h' -n 1)
-        git -C $GITHUB_WORKSPACE tag -a $TAG_NAME -m "Version $TAG_NAME"
-        git -C $GITHUB_WORKSPACE push origin $TAG_NAME
-        
-    - name: Upload Release APK to GitHub Releases
-      uses: softprops/action-gh-release@v1
+    - name: Upload Release APK to GitHub
+      uses: actions/upload-artifact@v2
       with:
-        files: app/build/outputs/apk/release/*.apk
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: release
+        path: release.zip
