@@ -28,9 +28,10 @@ jobs:
 
     - name: Build APK
       run: ./gradlew assembleRelease
+            zip -r release.zip $GITHUB_WORKSPACE/app/build/outputs/apk/${{ env.VERSION_CODE }}_release/
       
     - name: Upload Release APK to GitHub
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ env.VERSION_CODE }}-release
-        path: $GITHUB_WORKSPACE/app/build/outputs/apk/release/
+        name: ${{ env.VERSION_CODE }}_release
+        path: ${{ env.VERSION_CODE }}_release.zip
