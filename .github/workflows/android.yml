@@ -10,6 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Create Git tag
+      run: |
+        git config user.email "rashed162@gmail.com"
+        git config user.name "rashed-imam"
+        TAG_NAME=$(git log --pretty=format:'%h' -n 1)
+        git tag -a $TAG_NAME -m "Version $TAG_NAME"
+        git push origin $TAG_NAME
+
+    
     - name: Checkout code
       uses: actions/checkout@v2
 
