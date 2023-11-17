@@ -34,12 +34,11 @@ jobs:
 
     - name: Set up Git
       run: |
-        git config user.email "rashed162@gmail.com"
-        git config user.name "rashed-imam"
-        TAG_NAME=$(git log --pretty=format:'%h' -n 1)
-        cd $GITHUB_WORKSPACE  # Change to the repository directory
-        git tag -a $TAG_NAME -m "Version $TAG_NAME"
-        git push origin $TAG_NAME
+        git -C $GITHUB_WORKSPACE config user.email "rashed162@gmail.com"
+        git -C $GITHUB_WORKSPACE config user.name "rashed-imam"
+        TAG_NAME=$(git -C $GITHUB_WORKSPACE log --pretty=format:'%h' -n 1)
+        git -C $GITHUB_WORKSPACE tag -a $TAG_NAME -m "Version $TAG_NAME"
+        git -C $GITHUB_WORKSPACE push origin $TAG_NAME
         
     - name: Upload Release APK to GitHub Releases
       uses: softprops/action-gh-release@v1
