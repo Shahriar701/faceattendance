@@ -26,9 +26,12 @@ jobs:
       id: version_code
       run: echo "VERSION_CODE=$(./gradlew -q getVersionCode)" >> $GITHUB_ENV
 
+    - name: Run Unit Tests
+      run: ./gradlew test
+
     - name: Build APK
       run: ./gradlew assembleRelease
-            zip -r release.zip $GITHUB_WORKSPACE/app/build/outputs/apk/${{ env.VERSION_CODE }}_release/
+            zip -r release.zip $GITHUB_WORKSPACE/app/build/outputs/apk/release/
       
     - name: Upload Release APK to GitHub
       uses: actions/upload-artifact@v2
